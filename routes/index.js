@@ -1,13 +1,26 @@
 var express = require('express');
 var router = express.Router();
 var mysql = require('mysql');
+const {spawn} = require('child_process'); 
+
 
 var con = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "anrMar#18",
-  database: "cs411"
+  password: "nbavision",
+  database: "mydb"
 });
+
+class player {
+	constructor(name, pos, pe, conference) {
+	  this.name = name;
+	  this.pos = pos;
+	  this.pe = pe;
+	  this.conference = conference;
+
+	}
+  }
+
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -18,6 +31,38 @@ router.get('/hello', function(req, res, next) {
 	res.send('hello man!');
 });
 
+router.get('/draft', function(req, res, next) {
+	var dataToSend;
+	// spawn new child process to call the python script
+	const python = spawn('python', ['AllStarAI.py']);
+	// collect data from script
+	python.stdout.on('data', function (data) {
+	 console.log('Pipe data from python script ...');
+	 dataToSend = data.toString();
+	
+	});
+	// in close event we are sure that stream from child process is closed
+	python.on('close', (code) => {
+	console.log(`child process close all stdio with code ${code}`);
+	// send data to browser
+	
+	// 10 objects, name, position, player eff, conference
+
+	var tempArr = dataToSend.split(';');
+
+
+	var dataToSendArr = [];
+	let i = 0;
+
+	while(i < 40){
+		dataToSendArr.push(	player(tempArr[i],tempArr[i+1],tempArr[i+2],tempArr[i+3]) );
+		i = i + 4;
+	}
+
+
+	res.send(dataToSend)
+	});
+});
 
 router.get('/playerData', function(req, res, next) {
 	var playerName = req.query.name;

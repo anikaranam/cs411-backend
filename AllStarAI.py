@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[11]:
+# In[1]:
 
 
 # import modules
@@ -32,14 +32,13 @@ finally:
     if (connection.is_connected()):
         cursor.close()
         connection.close()
-        print("MySQL connection is closed")
         
 
 
 # In[3]:
 
 
-# define helper functions
+# define helper functions and classes
 def count(arr,s):
     total = 0
     for elem in arr:
@@ -52,6 +51,12 @@ def check_arr(arr):
         if i == False:
             return False
     return True
+
+class player:
+    def __init__(self,name,pe,position):
+        self.name = name
+        self.pe = pe
+        self.position = position
 
 
 # In[4]:
@@ -131,9 +136,11 @@ solution_pf = linalg.lstsq(pf_matrix,pf_pe) [0]
 solution_sf = linalg.lstsq(sf_matrix,sf_pe) [0]
 
 
-# In[34]:
+# In[5]:
 
 
+
+        
 def find_all_star_team(conference):
     max_pe_pg = -sys.maxsize
     best_pg = ''
@@ -273,6 +280,13 @@ def find_all_star_team(conference):
 
 
     plt.show()
+    pg_player = player(best_pg,max_pe_pg,Positions[0])
+    sg_player = player(best_sg,max_pe_sg,Positions[1])
+    c_player = player(best_c,max_pe_c,Positions[2])
+    pf_player = player(best_pf,max_pe_pf,Positions[3])
+    sf_player = player(best_sf,max_pe_sf,Positions[4])
+
+    return [pg_player,sg_player,c_player,pf_player,sf_player]
 
 
 # In[6]:
@@ -298,10 +312,7 @@ def playerinNewPosition(name, position, position_soln):
 # In[7]:
 
 
-print(playerinNewPosition('James Harden', 'SF', solution_sf))
-
-
-# In[35]:
+# In[8]:
 
 
 find_all_star_team("East")

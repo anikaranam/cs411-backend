@@ -1,7 +1,7 @@
 const express = require('express')
 const {spawn} = require('child_process');
 const app = express()
-const port = 3000
+const port = 3002
 app.get('/', (req, res) => {
  
  var dataToSend;
