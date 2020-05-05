@@ -32,6 +32,7 @@ finally:
     if (connection.is_connected()):
         cursor.close()
         connection.close()
+#         print("MySQL connection is closed")
         
 
 
@@ -264,11 +265,11 @@ def find_all_star_team(conference):
                 skip_list.add(all_star[best_fit_positon])
 
 
-    print("The best Point Guard in the NBA " + str(conference) +" conference is "+ str(best_pg) + " with a PE of "+ str(max_pe_pg))
-    print("The best Shooting Guard in the NBA " + str(conference) +" conference is "+ str(best_sg) + " with a PE of "+ str(max_pe_sg))
-    print("The best Center in the NBA " + str(conference) + " conference is "+ str(best_c) + " with a PE of "+ str(max_pe_c))
-    print("The best Power Forward in the NBA " + str(conference) + " is "+ str(best_pf) + " with a PE of "+ str(max_pe_pf))
-    print("The best Small Forward in the NBA " + str(conference) + " is "+ str(best_sf) + " with a PE of "+ str(max_pe_sf))
+#     print("The best Point Guard in the NBA " + str(conference) +" conference is "+ str(best_pg) + " with a PE of "+ str(max_pe_pg))
+#     print("The best Shooting Guard in the NBA " + str(conference) +" conference is "+ str(best_sg) + " with a PE of "+ str(max_pe_sg))
+#     print("The best Center in the NBA " + str(conference) + " conference is "+ str(best_c) + " with a PE of "+ str(max_pe_c))
+#     print("The best Power Forward in the NBA " + str(conference) + " is "+ str(best_pf) + " with a PE of "+ str(max_pe_pf))
+#     print("The best Small Forward in the NBA " + str(conference) + " is "+ str(best_sf) + " with a PE of "+ str(max_pe_sf))
     image = Image.open('basketball_positions.png')
 
     plt.imshow(image)
@@ -312,12 +313,22 @@ def playerinNewPosition(name, position, position_soln):
 # In[7]:
 
 
+# print(playerinNewPosition('LeBron James', 'Small Forward', solution_pg))
+
+
 # In[8]:
 
 
-find_all_star_team("East")
-print()
-find_all_star_team("West")
+east_arr = find_all_star_team("East")
+west_arr = find_all_star_team("West")
+# self.name = name
+# self.pe = pe
+# self.position = position
+for obj in east_arr:
+    print(str(obj.name) + ';' + str(obj.position) + ';' + str(obj.pe) + ';'  + "East" + ';'   )
+
+for obj in west_arr:
+    print(str(obj.name) + ';' + str(obj.position) + ';' + str(obj.pe) + ';'  + "West" + ';'   )
 
 
 # In[ ]:
