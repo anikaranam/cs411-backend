@@ -55,7 +55,7 @@ router.get('/draft', function(req, res, next) {
 	let i = 0;
 
 	while(i < 40){
-		dataToSendArr.push(	player(tempArr[i],tempArr[i+1],tempArr[i+2],tempArr[i+3]) );
+		dataToSendArr.push(	new player(tempArr[i],tempArr[i+1],tempArr[i+2],tempArr[i+3]) );
 		i = i + 4;
 	}
 
