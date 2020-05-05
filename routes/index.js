@@ -284,22 +284,61 @@ router.get('/coachPointsPerGame', function(req, res, next) {
 });
 
 
-router.get('/teamWins', function(req, res, next) {
+/*router.get('/teamWins', function(req, res, next) {
 	var teamName = req.query.name;
 	console.log(teamName);
 
-	con.query("select * from Team where TeamName = '" + teamhName + "'", function(err,output){
+	con.query("select * from Team where TeamName = '" + teamName + "'", function(err,output){
 		if (err)
 			throw err;
 		if (output.length == 0)
 			res.send("No Team Exists");
 	})
 
-	con.query("select count(*) from Game where Winner = '" + teamName + "'", function(err, output) {
+	con.query("select count(*) as wins from Game where Winner = '" + teamName + "'", function(err, output) {
 		if (err)
 			throw err;
 		res.send(output);
 	})
+});*/
+
+router.post('/teamWins', function(req, res, next) {
+	/*var teamName = req.query.name;
+	console.log(teamName);*/
+
+	var teams = req.body.toCompare;
+	console.log(teams);
+
+	/*con.query("select * from Team where TeamName = '" + teamName + "'", function(err,output){
+		if (err)
+			throw err;
+		if (output.length == 0)
+			res.send("No Team Exists");
+	})*/
+	var winsArr = [];
+	for (let i = 0; i < teams.length; i++) {
+
+		con.query("select count(*) as wins from Game where Winner = '" + teams[i] + "'", function(err, output) {
+			if (err) {
+				throw err;
+			}
+
+			winsArr.push(output[0].wins);
+			console.log(output[0].wins);
+			console.log(winsArr);
+			if (i == teams.length - 1) {
+				res.send(winsArr);
+			}
+		});
+	}
+	//console.log(winsArr + "   heeeere ");
+	//res.send(winsArr);
+
+	/*con.query("select count(*) as wins from Game where Winner = '" + teamName + "'", function(err, output) {
+		if (err)
+			throw err;
+		res.send(output);
+	})*/
 });
 
 
@@ -327,7 +366,7 @@ router.get('/teamPoints', function(req, res, next) {
 	var teamName = req.query.name;
 	console.log(teamName);
 
-	con.query("select * from Team where TeamName = '" + teamhName + "'", function(err,output){
+	con.query("select * from Team where TeamName = '" + teamName + "'", function(err,output){
 		if (err)
 			throw err;
 		if (output.length == 0)
