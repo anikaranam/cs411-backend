@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[11]:
 
 
 # import modules
@@ -9,6 +9,8 @@ import numpy as np
 import sys
 from scipy import linalg
 import mysql.connector
+import matplotlib.pyplot as plt
+from PIL import Image
 
 
 # In[2]:
@@ -129,7 +131,7 @@ solution_pf = linalg.lstsq(pf_matrix,pf_pe) [0]
 solution_sf = linalg.lstsq(sf_matrix,sf_pe) [0]
 
 
-# In[5]:
+# In[34]:
 
 
 def find_all_star_team(conference):
@@ -260,6 +262,17 @@ def find_all_star_team(conference):
     print("The best Center in the NBA " + str(conference) + " conference is "+ str(best_c) + " with a PE of "+ str(max_pe_c))
     print("The best Power Forward in the NBA " + str(conference) + " is "+ str(best_pf) + " with a PE of "+ str(max_pe_pf))
     print("The best Small Forward in the NBA " + str(conference) + " is "+ str(best_sf) + " with a PE of "+ str(max_pe_sf))
+    image = Image.open('basketball_positions.png')
+
+    plt.imshow(image)
+    plt.annotate(best_pg, (600,500))
+    plt.annotate(best_sg, (200,650))
+    plt.annotate(best_c, (830,800))
+    plt.annotate(best_pf, (400,1000))
+    plt.annotate(best_sf, (980,1100))
+
+
+    plt.show()
 
 
 # In[6]:
@@ -288,12 +301,18 @@ def playerinNewPosition(name, position, position_soln):
 print(playerinNewPosition('James Harden', 'SF', solution_sf))
 
 
-# In[8]:
+# In[35]:
 
 
 find_all_star_team("East")
 print()
 find_all_star_team("West")
+
+
+# In[ ]:
+
+
+
 
 
 # In[ ]:
