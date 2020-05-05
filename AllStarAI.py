@@ -14,35 +14,27 @@ import mysql.connector
 # In[2]:
 
 
-# change to the appropriate user and password
-mydb = mysql.connector.connect(
-  host="localhost",
-  user="root",
-  passwd="nbavision"
-)
+try:
+    connection = mysql.connector.connect(host='localhost',
+                                         database='mydb',
+                                         user='root',
+                                         password='nbavision')
+    cursor = connection.cursor()
+    cursor.callproc('GetNBAData')
+    for result in cursor.stored_results():
+        myresult = result.fetchall()
+
+except mysql.connector.Error as error:
+    print("Failed to execute stored procedure: {}".format(error))
+finally:
+    if (connection.is_connected()):
+        cursor.close()
+        connection.close()
+        print("MySQL connection is closed")
+        
 
 
 # In[3]:
-
-
-mycursor = mydb.cursor()
-
-mycursor.execute("USE mydb;") # change to whatever database name you use
-
-'''
-PlayerName 0, PointsPerGame 1, AssistsPerGame 2, ReboundsPerGame 3, BlocksPerGame 4, StealsPerGame 5, \
-ThreePointPercentage 6, MinutesPerGame 7, GamesPlayed 8, Height 9, Weight 10,  Position 11, \
-PlayerEfficiency 12 Conference 13
-'''
-
-query = "SELECT Player.PlayerName, Player.PointsPerGame, Player.AssistsPerGame, Player.ReboundsPerGame, Player.BlocksPerGame, Player.StealsPerGame, Player.ThreePointPercentage, Player.MinutesPerGame, Player.GamesPlayed, Player.Height, Player.Weight,  Player.Position, Player.PlayerEfficiency, Team.Conference FROM Player JOIN Team ON Player.PlaysFor = Team.TeamName "
-
-mycursor.execute(query)
-
-myresult = mycursor.fetchall()
-
-
-# In[12]:
 
 
 # define helper functions
@@ -60,7 +52,7 @@ def check_arr(arr):
     return True
 
 
-# In[6]:
+# In[4]:
 
 
 #train the AI on all 5 positions
@@ -137,7 +129,7 @@ solution_pf = linalg.lstsq(pf_matrix,pf_pe) [0]
 solution_sf = linalg.lstsq(sf_matrix,sf_pe) [0]
 
 
-# In[18]:
+# In[5]:
 
 
 def find_all_star_team(conference):
@@ -270,7 +262,7 @@ def find_all_star_team(conference):
     print("The best Small Forward in the NBA " + str(conference) + " is "+ str(best_sf) + " with a PE of "+ str(max_pe_sf))
 
 
-# In[8]:
+# In[6]:
 
 
 def playerinNewPosition(name, position, position_soln):
@@ -290,13 +282,13 @@ def playerinNewPosition(name, position, position_soln):
     return None
 
 
-# In[9]:
+# In[7]:
 
 
-print(playerinNewPosition('LeBron James', 'PG', solution_pg))
+print(playerinNewPosition('James Harden', 'SF', solution_sf))
 
 
-# In[19]:
+# In[8]:
 
 
 find_all_star_team("East")
