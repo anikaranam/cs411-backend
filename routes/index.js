@@ -536,13 +536,25 @@ router.get('/players', function(req, res, next) {
 	})
 });
 
+router.get('/readCoachRecord', function(req, res, next) {
+	var coachName = req.query.coachName;
+	con.query("select * from Coach where CoachName = '" + coachName + "'", function(err,output){
+		if (err)
+			throw err;
+		res.send(output);
+	})
+});
+
 router.post('/addCoachRecord', function(req, res, next) {
 
 	var coachData = req.body;
 	console.log(coachData);
 
+	var winPercent = (parseInt(coachData.CareerWins)/ (parseInt(coachData.CareerWins) + parseInt(coachData.CareerLosses))) * 100;
+
 	con.query("insert into Coach values ('" + coachData.CoachName + "', " + coachData.SeasonsActive
-		+ ", " + coachData.CareerWins + ", " + coachData.CareerLosses + ", " + coachData.WInPercentage + ")", function(err, output) {
+		+ ", " + coachData.CareerWins + ", " + coachData.CareerLosses + ", " + winPercent+ ", '" + "New Orleans Pelicans'" + 
+		")", function(err, output) {
 		if (err)
 			throw err;
 		res.send(output);
@@ -584,10 +596,35 @@ router.get('/playerWins', function(req, res, next) {
 
 
 router.get('/topPoints', function(req, res, next) {
-	con.query("select x.number/y.number from (select Count(Player.PlayerName) as number from Player join (Select Game.Winner from Game Group By Winner ORDER BY Count(Winner) DESC LIMIT 10) top_ten ON top_ten.Winner = Player.playsFor WHERE Player.PointsPerGame > 20) x JOIN (SELECT Count(Player.PlayerName) as number FROM Player WHERE Player.PointsPerGame >20) y", function(err,output){
+	con.query("select x.number/y.number as topPoints from (select Count(Player.PlayerName) as number from Player join (Select Game.Winner from Game Group By Winner ORDER BY Count(Winner) DESC LIMIT 10) top_ten ON top_ten.Winner = Player.playsFor WHERE Player.PointsPerGame > 20) x JOIN (SELECT Count(Player.PlayerName) as number FROM Player WHERE Player.PointsPerGame >20) y", function(err,output){
 		if (err)
 			throw err;
 		res.send(output);
+	})
+});
+
+router.post('/compareCoaches', function(req, res, next) {
+	var coach1 = req.query.name1;
+	var coach2 = req.query.name2;
+	console.log(coach1 + "   " + coach2);
+	con.query("select CoachName, PointsScored from Coach c, Team t where c.Manages = t.TeamName and (CoachName = '" + coach1 + "' or CoachName = '" + coach2 + "') ", function(err,output){
+		if (err)
+			throw err;
+
+		var winner = {
+			name: "",
+			points: ""
+		}
+		console.log(output[0]);
+		if (output[0].PointsScored > output[1].PointsScored) {
+			winner.name = output[0].CoachName;
+			winner.points = output[0].PointsScored;
+		} else {
+			winner.name = output[1].CoachName;
+			winner.points = output[1].PointsScored;
+		}
+		console.log(winner);
+		res.send(winner);
 	})
 });
 
