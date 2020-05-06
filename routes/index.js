@@ -50,7 +50,6 @@ router.get('/draft', function(req, res, next) {
 
 	var tempArr = dataToSend.split(';');
 
-
 	var dataToSendArr = [];
 	let i = 0;
 
@@ -60,7 +59,7 @@ router.get('/draft', function(req, res, next) {
 	}
 
 
-	res.send(dataToSend)
+	res.send(dataToSendArr)
 	});
 });
 
