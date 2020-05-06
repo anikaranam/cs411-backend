@@ -273,18 +273,21 @@ def find_all_star_team(conference):
     image = Image.open('basketball_positions.png')
 
     plt.imshow(image)
-    a1 = plt.annotate(best_pg, (600,500))
-    a2 = plt.annotate(best_sg, (200,650))
-    a3 = plt.annotate(best_c, (830,800))
-    a4 = plt.annotate(best_pf, (400,1000))
-    a5 = plt.annotate(best_sf, (980,1100))
-    plt.title('Conference ' + str(conference))
-    plt.savefig('../frontend/src/'+str(conference)+'.png')
+    a1 = plt.annotate(best_pg, (600,500),color = 'white', weight = 'bold')
+    a2 = plt.annotate(best_sg, (200,650),color = 'white', weight = 'bold')
+    a3 = plt.annotate(best_c, (830,800),color = 'white', weight = 'bold')
+    a4 = plt.annotate(best_pf, (400,1000),color = 'white', weight = 'bold')
+    a5 = plt.annotate(best_sf, (980,1100),color = 'white', weight = 'bold')
+    plt.title('Conference ' + str(conference),color = 'white', weight = 'bold')
+    plt.axis('off')
+    plt.savefig('../frontend/src/'+str(conference)+'.png', facecolor="#17408B")
+
     a1.remove()
     a2.remove()
     a3.remove()
     a4.remove()
     a5.remove()
+
 
 
 
