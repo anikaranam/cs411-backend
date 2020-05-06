@@ -587,7 +587,8 @@ router.delete('/deleteCoachRecord', function(req, res, next) {
 });
 
 router.get('/playerWins', function(req, res, next) {
-	con.query("select Player.PlayerName, wins_table.number_of_wins from Player, (Select Game.Winner, Count(Winner) as number_of_wins from Game Group By Winner) wins_table where Player.PlaysFor = wins_table.Winner", function(err,output){
+	var player1 = req.query.name;
+	con.query("select Player.PlayerName, wins_table.number_of_wins from Player, (Select Game.Winner, Count(Winner) as number_of_wins from Game Group By Winner) wins_table where Player.PlaysFor = wins_table.Winner and Player.PlayerName = '" + player1 + "'", function(err,output){
 		if (err)
 			throw err;
 		res.send(output);
@@ -603,7 +604,7 @@ router.get('/topPoints', function(req, res, next) {
 	})
 });
 
-router.post('/compareCoaches', function(req, res, next) {
+router.get('/compare', function(req, res, next) {
 	var coach1 = req.query.name1;
 	var coach2 = req.query.name2;
 	console.log(coach1 + "   " + coach2);
