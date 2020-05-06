@@ -565,5 +565,21 @@ router.delete('/deleteCoachRecord', function(req, res, next) {
 	})
 });
 
+router.get('/playerWins', function(req, res, next) {
+	con.query("select Player.PlayerName, wins_table.number_of_wins from Player, (Select Game.Winner, Count(Winner) as number_of_wins from Game Group By Winner) wins_table where Player.PlaysFor = wins_table.Winner", function(err,output){
+		if (err)
+			throw err;
+		res.send(output);
+	})
+});
+
+
+router.get('/topPoints', function(req, res, next) {
+	con.query("select x.number/y.number from (select Count(Player.PlayerName) as number from Player join (Select Game.Winner from Game Group By Winner ORDER BY Count(Winner) DESC LIMIT 10) top_ten ON top_ten.Winner = Player.playsFor WHERE Player.PointsPerGame > 20) x JOIN (SELECT Count(Player.PlayerName) as number FROM Player WHERE Player.PointsPerGame >20) y", function(err,output){
+		if (err)
+			throw err;
+		res.send(output);
+	})
+});
 
 module.exports = router;
